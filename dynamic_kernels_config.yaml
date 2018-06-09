@@ -1,0 +1,67 @@
+---
+# configuration file for use with dynamic_kernel_launcher.py
+# provides meta information and installation instructions for multiple dynamic kernels
+py2: 
+    description: "dynamic Py2 kernel using a separate conda environment"
+    language: Python2
+    kernel: ipython2
+    executable: /opt/conda/envs/py2/bin/python
+    installation:
+        - "conda create -y -n py2 python=2 ipykernel"
+
+javascript:
+    description: "dynamic javascript kernel using ijskernel"
+    language: Javascript
+    kernel: ijskernel
+    executable: /opt/conda/bin/ijskernel
+    installation:
+        - "conda install -y nodejs"
+        - "npm install -g ijavascript"
+
+ruby:
+    description: "dynamic iruby kernel installed in default conda environment"
+    language: Ruby
+    kernel: iruby
+    executable: /opt/conda/bin/iruby
+    installation:
+        # epl-release should be already installed via dockerfile but its here just in case
+        # it has to be installed first and separaately for czmq-devel to be installable
+        - "sudo yum install -y epel-release"
+        - "sudo yum install -y czmq-devel"
+        # make and ruby should be already conda installed via dockerfile
+        - "conda install -y gxx_linux-64" 
+        - "gem install cztop iruby"
+        # shouldn't need to register iruby because of custom script
+
+lgo:
+    description: "dynamic Go kernel using lgo"
+    language: Go
+    kernel: lgo
+    executable: $HOME/.local/share/go/bin/lgo
+    installation:
+        - "sudo yum -y update && sudo yum install -y zeromq-devel"
+        - "conda install -y -c conda-forge git go"
+        - "export GOPATH=$HOME/.local/share/go"
+        - "go get github.com/yunabe/lgo/cmd/lgo && go get -d github.com/yunabe/lgo/cmd/lgo-internal"
+        - "export LGOPATH=$HOME/.local/share/lgo"
+        - "export PATH=$GOPATH/bin:$PATH"
+        - "lgo install"
+
+r_big:
+    description: "dynamic irkernel using a separate conda environment"
+    language: R
+    kernel: irkernel
+    executable: /opt/conda/envs/r-env/lib/R/bin/R
+    installation:
+        - "sudo yum install -y libXrender libXext"
+        # creates and installs in a separate virtual environment
+        - "conda create -y -n r-env -c r r-essentials"
+
+r_small:
+    description: "dynamic irkernel installed in default conda environment"
+    language: R
+    kernel: irkernel
+    executable: /opt/conda/bin/R
+    installation:
+        - "sudo yum install -y libXrender libXext"
+        - "conda install -y -c r r-irkernel"
