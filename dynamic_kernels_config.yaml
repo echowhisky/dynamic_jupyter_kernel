@@ -1,6 +1,8 @@
 ---
 # configuration file for use with dynamic_kernel_launcher.py
 # provides meta information and installation instructions for multiple dynamic kernels
+#
+# CentOS version
 py2: 
     description: "dynamic Py2 kernel using a separate conda environment"
     language: Python2
