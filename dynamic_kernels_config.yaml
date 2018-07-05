@@ -13,7 +13,7 @@ py2:
 
 javascript:
     description: "dynamic javascript kernel using ijskernel"
-    language: Javascript
+    language: JavaScript
     kernel: ijskernel
     executable: /opt/conda/bin/ijskernel
     installation:
