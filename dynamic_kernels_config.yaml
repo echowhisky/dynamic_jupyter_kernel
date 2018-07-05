@@ -6,23 +6,40 @@
 py2: 
     description: "dynamic Py2 kernel using a separate conda environment"
     language: Python2
+    syntax: python
+    display_name: "Old Python2"
     kernel: ipython2
     executable: /opt/conda/envs/py2/bin/python
     installation:
         - "conda create -y -n py2 python=2 ipykernel"
+    argv:
+        - "-m"
+        - "ipykernel"
+        - "-f"
+        - "{connection_file}"
+
 
 javascript:
     description: "dynamic javascript kernel using ijskernel"
     language: JavaScript
+    syntax: javascript
+    display_name: "JavaScript (Node.js)"
     kernel: ijskernel
     executable: /opt/conda/bin/ijskernel
     installation:
         - "conda install -y nodejs"
         - "npm install -g ijavascript"
+    argv:
+        - "--debug"
+        - "--hide-undefined"
+        - "{connection_file}"
+        - "--protocol=5.0"
 
 ruby:
     description: "dynamic iruby kernel installed in default conda environment"
     language: Ruby
+    syntax: ruby
+    display_name: Ruby
     kernel: iruby
     executable: /opt/conda/bin/iruby
     installation:
@@ -34,10 +51,15 @@ ruby:
         - "conda install -y gxx_linux-64" 
         - "gem install cztop iruby"
         # shouldn't need to register iruby because of custom script
+    argv:
+        - "kernel"
+        - "{connection_file}"
 
 lgo:
     description: "dynamic Go kernel using lgo"
     language: Go
+    syntax: go
+    display_name: "Go (lgo)"
     kernel: lgo
     executable: $HOME/.local/share/go/bin/lgo
     installation:
@@ -48,22 +70,57 @@ lgo:
         - "export LGOPATH=$HOME/.local/share/lgo"
         - "export PATH=$GOPATH/bin:$PATH"
         - "lgo install"
+    argv:
+        - "kernel"
+        - "--connection_file={connection_file}"
 
 r_big:
     description: "dynamic irkernel using a separate conda environment"
     language: R
+    syntax: R
+    display_name: "R (big install, separate env)"
     kernel: irkernel
     executable: /opt/conda/envs/r-env/lib/R/bin/R
     installation:
         - "sudo yum install -y libXrender libXext"
         # creates and installs in a separate virtual environment
         - "conda create -y -n r-env -c r r-essentials"
+    argv:
+        - "--slave"
+        - "-e"
+        - "IRkernel::main()"
+        - "--args"
+        - "{connection_file}"
 
 r_small:
     description: "dynamic irkernel installed in default conda environment"
     language: R
+    syntax: R
+    display_name: "R (small install, default env)"
     kernel: irkernel
     executable: /opt/conda/bin/R
     installation:
         - "sudo yum install -y libXrender libXext"
         - "conda install -y -c r r-irkernel"
+    argv:
+        - "--slave"
+        - "-e"
+        - "IRkernel::main()"
+        - "--args"
+        - "{connection_file}"
+
+
+c_lang:
+    description: "kernel for C, assumes it is already installed"
+    language: C
+    syntax: c
+    display_name: C
+    installation:
+        # pass - this is for a pre-installed kernel
+    argv:
+        - "python"
+        - "-m"
+        - "jupyter_c_kernel"
+        - "-f"
+        - "{connection_file}"
+
